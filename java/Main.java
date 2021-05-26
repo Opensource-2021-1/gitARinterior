@@ -1,4 +1,4 @@
-package com.example.square;
+package com.example.square_project;
 
 import android.os.Bundle;
 
