@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-                title_list.add(new MyList((String)msg.obj, R.drawable.ic_launcher_foreground));  //리스트에 타이틀 업데이트
+                title_list.add(new MyList((String) msg.obj, R.drawable.ic_launcher_foreground));  //리스트에 타이틀 업데이트
             } else if (msg.what == 1) {
                 url_list.add((String) msg.obj);  //url 리스트에 링크 저장
             } else if (msg.what == 2) {
@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listview); //리스트뷰
-        Button goButton = (Button) findViewById(R.id.button); //버튼
 
         //어댑터 생성
         MyAdapter adapter = new MyAdapter(  //커스텀 어댑터
@@ -66,16 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 title_list);         // 데이터
         listView.setAdapter(adapter);
 
-        goButton.setOnClickListener(new View.OnClickListener() { //버튼 클릭 시 크롤링
-            @Override
-            public void onClick(View view) {
-                //스레드의 Runnable로 구현
-                TitleRunnable nr = new TitleRunnable();
-                Thread t = new Thread(nr);
-                t.setDaemon(true); // 메인스레드와 함께 종료
-                t.start();
-            }
-        });
+        //스레드의 Runnable로 구현, 리스트 띄우기
+        TitleRunnable nr = new TitleRunnable();
+        Thread t = new Thread(nr);
+        t.setDaemon(true); // 메인스레드와 함께 종료
+        t.start();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,11 +130,11 @@ class MyAdapter extends BaseAdapter {
     ArrayList<MyList> title_list;
     LayoutInflater inf;
 
-    public MyAdapter(Context context, int layout, ArrayList<MyList> title_list){
+    public MyAdapter(Context context, int layout, ArrayList<MyList> title_list) {
         this.context = context;
         this.layout = layout;
         this.title_list = title_list;
-        inf = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -160,11 +154,11 @@ class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null){
+        if (view == null) {
             view = inf.inflate(layout, null);
         }
-        ImageView img = (ImageView)view.findViewById(R.id.imageView1);
-        TextView title = (TextView)view.findViewById(R.id.textView1);
+        ImageView img = (ImageView) view.findViewById(R.id.imageView1);
+        TextView title = (TextView) view.findViewById(R.id.textView1);
 
         MyList mylist = title_list.get(i);
 
@@ -174,13 +168,17 @@ class MyAdapter extends BaseAdapter {
         return view;
     }
 }
+
 class MyList {
     String title = "";  //제목
     int img;  //별 이미지
-    public MyList(String title, int img){
+
+    public MyList(String title, int img) {
         super();
-        this.title=title;
-        this.img=img;
+        this.title = title;
+        this.img = img;
     }
-    public MyList(){}
+
+    public MyList() {
+    }
 }
