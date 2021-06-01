@@ -11,6 +11,6 @@
 
 **김예원 브랜치**
 
-학과 홈페이지 jsoup 크롤링, selenium
+학과 홈페이지 jsoup 크롤링
 
-listview로 공지사항 띄우기, listview 클릭 이벤트 처리
+listview로 공지사항 띄우기, listview 클릭 이벤트(화면전환, 토스트) 처리
