@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sns_project.R;
 
-public class infoActivity extends BasicActivity {
+public class InfoActivity extends BasicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
