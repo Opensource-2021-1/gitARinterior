@@ -35,12 +35,8 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-                title_list.add(new MyList((String) msg.obj, R.drawable.ic_launcher_foreground));  //리스트에 타이틀 업데이트
-            } else if (msg.what == 1) {
-                url_list.add((String) msg.obj);  //url 리스트에 링크 저장
-            } else if (msg.what == 2) {
                 //어댑터 타이틀 갱신
-                MyAdapter adapter = (MyAdapter) listView.getAdapter(); //어댑터 불러오기
+                ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter(); //어댑터 불러오기
                 adapter.notifyDataSetChanged(); //불러온 후 갱신
             }
         }
@@ -48,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     UIHandler handler = new UIHandler();  //핸들러
     ListView listView;  //리스트뷰
-    ArrayList<MyList> title_list = new ArrayList<MyList>();  //제목들
+    ArrayList<String> title_list = new ArrayList<String>();  //제목들
     ArrayList<String> url_list = new ArrayList<String>(); //url 넣기
+    ArrayAdapter<String> cbnu_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +56,8 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listview); //리스트뷰
 
         //어댑터 생성
-        MyAdapter adapter = new MyAdapter(  //커스텀 어댑터
-                getApplicationContext(),
-                R.layout.custom_list,  // 리스트뷰의 한행의 레이아웃
-                title_list);         // 데이터
-        listView.setAdapter(adapter);
+        cbnu_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, title_list);
+        listView.setAdapter(cbnu_adapter);
 
         //스레드의 Runnable로 구현, 리스트 띄우기
         TitleRunnable nr = new TitleRunnable();
@@ -107,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     String cbnuTitle = elem.select("td a").text(); //제목
 
                     /* 공지사항 제목을 리스트에 add */
-                    title_list.add(new MyList(cbnuTitle, R.drawable.army));  //리스트에 타이틀 업데이트
+                    title_list.add(cbnuTitle);  //리스트에 타이틀 업데이트
 
                     /* 링크를 리스트에 add */
                     String cbnuLink = elem.select("a").attr("href");  //링크 크롤링
@@ -115,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 //핸들러로 리스트에 add된 제목을 갱신
                 Message msg = Message.obtain();
-                handler.sendEmptyMessage(2);
+                handler.sendEmptyMessage(0);
             } catch (IOException e) {
                 builder.append("Error");
                 System.out.println("에러");
@@ -124,61 +118,61 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-class MyAdapter extends BaseAdapter {
-    Context context;
-    int layout;
-    ArrayList<MyList> title_list;
-    LayoutInflater inf;
-
-    public MyAdapter(Context context, int layout, ArrayList<MyList> title_list) {
-        this.context = context;
-        this.layout = layout;
-        this.title_list = title_list;
-        inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return title_list.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return title_list.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = inf.inflate(layout, null);
-        }
-        ImageView img = (ImageView) view.findViewById(R.id.imageView1);
-        TextView title = (TextView) view.findViewById(R.id.textView1);
-
-        MyList mylist = title_list.get(i);
-
-        img.setImageResource(mylist.img);
-        title.setText(mylist.title);
-
-        return view;
-    }
-}
-
-class MyList {
-    String title = "";  //제목
-    int img;  //별 이미지
-
-    public MyList(String title, int img) {
-        super();
-        this.title = title;
-        this.img = img;
-    }
-
-    public MyList() {
-    }
-}
+//class MyAdapter extends BaseAdapter {
+//    Context context;
+//    int layout;
+//    ArrayList<MyList> title_list;
+//    LayoutInflater inf;
+//
+//    public MyAdapter(Context context, int layout, ArrayList<MyList> title_list) {
+//        this.context = context;
+//        this.layout = layout;
+//        this.title_list = title_list;
+//        inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return title_list.size();
+//    }
+//
+//    @Override
+//    public Object getItem(int i) {
+//        return title_list.get(i);
+//    }
+//
+//    @Override
+//    public long getItemId(int i) {
+//        return i;
+//    }
+//
+//    @Override
+//    public View getView(int i, View view, ViewGroup viewGroup) {
+//        if (view == null) {
+//            view = inf.inflate(layout, null);
+//        }
+//        ImageView img = (ImageView) view.findViewById(R.id.imageView1);
+//        TextView title = (TextView) view.findViewById(R.id.textView1);
+//
+//        MyList mylist = title_list.get(i);
+//
+//        img.setImageResource(mylist.img);
+//        title.setText(mylist.title);
+//
+//        return view;
+//    }
+//}
+//
+//class MyList {
+//    String title = "";  //제목
+//    int img;  //별 이미지
+//
+//    public MyList(String title, int img) {
+//        super();
+//        this.title = title;
+//        this.img = img;
+//    }
+//
+//    public MyList() {
+//    }
+//}
